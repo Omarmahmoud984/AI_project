@@ -55,7 +55,7 @@ Patient message: "{}"
 # ---------- Model call (the ONLY model call in this architecture) 
 def classify(user_input: str) -> str:
     response = client.models.generate_content(
-        model='gemini-3.5-flash-lite',
+        model='gemini-3.5-flash',
         contents=ROUTING_PROMPT.format(user_input)
     )
     return response.text.strip()
@@ -86,25 +86,25 @@ def handle_message(user_input: str) -> str:
         return "Happy to help! good bye"
 
     elif category == "DOCTOR_INFO":
-            if  'ahmed' in user_inp :
+            if  'ahmed' in user_input and "n't" not in user_input :
                   print(f'the doctor working time is {doctors["Dr Ahmed"]}')
 
                   return get_dr_stat('Dr Ahmed')
-            elif  'sara' in user_inp :
+            elif  'sara' in user_input :
 
                   print(f'the doctor working time is {doctors["Dr Sara"]}')
                   return get_dr_stat('Dr Sara')
 
-            elif  'moham' in user_inp :
+            elif  'moham' in user_input :
                   print(f'the doctor working time is {doctors["Dr Mohamed"]}')
 
                   return get_dr_stat('Dr Mohamed')
-            elif  'nour' in user_inp :
+            elif  'nour' in user_input :
 
                   print(f'the doctor working time is {doctors["Dr Nour"]}')
                   return get_dr_stat('Dr Nour')
 
-            elif  'yasmi' in user_inp :
+            elif  'yasmi' in user_input :
                   print(f'the doctor working time is {doctors["Dr Yasmine"]}')
                   return get_dr_stat('Dr Yasmine')
 
@@ -122,7 +122,11 @@ def handle_message(user_input: str) -> str:
 
 # ---------- Test loop ----------
 while True:
-    user_inp = input().lower()
-    if user_inp == "quit":
-        break
-    print(handle_message(user_inp)) 
+    try :
+        user_inp = input().lower()
+        if user_inp == "quit":
+            break
+        print(handle_message(user_inp)) 
+    except Exception as e:
+         print(f'error -> {e}')
+         print('send again later')
