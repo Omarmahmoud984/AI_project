@@ -6,9 +6,14 @@ nothing else is ever exposed to the model.
 
 import json
 import random as rand
+import os
 
-with open("doctors.json", "r") as f:
-    DOCTORS = json.load(f)
+import os
+
+BASE_DIR = os.path.dirname(__file__)
+
+with open(os.path.join(BASE_DIR, "doctors.json"), "r") as f:
+    doctors = json.load(f)
 
 ROUTE_MAP = {
     "BURNS": "go to burns department quickly",
@@ -37,7 +42,7 @@ def _normalize(name: str) -> str:
 def check_doctor_availability(doctor_name: str) -> str:
     """Simulates a live availability check for a doctor."""
     doctor_name = _normalize(doctor_name)
-    if doctor_name not in DOCTORS:
+    if doctor_name not in doctors:
         return f"Unknown doctor: {doctor_name}"
     available = rand.choice([True, False])
     return f"{doctor_name} is {'available' if available else 'not available'}"
@@ -45,13 +50,13 @@ def check_doctor_availability(doctor_name: str) -> str:
 
 def get_doctor_schedule(doctor_name: str) -> str:
     doctor_name = _normalize(doctor_name)
-    if doctor_name not in DOCTORS:
+    if doctor_name not in doctors:
         return f"Unknown doctor: {doctor_name}"
-    return f"{doctor_name} working hours: {DOCTORS[doctor_name]}"
+    return f"{doctor_name} working hours: {doctors[doctor_name]}"
 
 
 def list_all_doctors() -> str:
-    lines = [f"{name} -> {hours}" for name, hours in DOCTORS.items()]
+    lines = [f"{name} -> {hours}" for name, hours in doctors.items()]
     return "\n".join(lines)
 
 
