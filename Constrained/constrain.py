@@ -11,7 +11,7 @@ Run:  python agent.py
 Needs: a .env file with GEMINI_API_KEY=... (see .env.example)
 Model: gemini-3.5-flash-lite (Google AI Studio free tier)
 """
-
+import time
 import os
 import json
 from dotenv import load_dotenv
@@ -41,7 +41,6 @@ TOOL_ALLOWLIST = {
 # ---------------------------------------------------------------------------
 
 load_dotenv()
-API_KEY = os.getenv("GEMINI_API_KEY")
 API_KEY = os.getenv("GEMINI_API_KEY")
 
 if not API_KEY:
@@ -141,6 +140,16 @@ if __name__ == "__main__":
     print("Hi! I'm the Hospital constrained-ReAct triage assistant. (type 'quit' to exit)")
     while True:
         user_inp = input("> ")
+        
         if user_inp.lower() == "quit":
             break
-        print(run_agent(user_inp))
+        
+        start = time.perf_counter()
+
+        result = run_agent(user_inp)
+
+        end = time.perf_counter()
+
+        print(result)
+        
+        print(f"TOTAL Response Time: {end - start:.4f} seconds")
