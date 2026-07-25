@@ -1,7 +1,14 @@
 from google import genai
 import json 
 import random as rand
-with open ('doctors.json' , 'r') as f :
+import time
+import os
+from dotenv import load_dotenv
+
+
+
+
+with open("doctors.json", "r") as f:
     doctors = json.load(f)
 
 def get_dr_stat(text) :
@@ -22,9 +29,17 @@ def display_all_DRs(file :dict) :
 
 
 # ---------- Setup ----------
-API_KEY = ''
+load_dotenv()
+
+API_KEY = os.getenv("API_KEY")
+
+if not API_KEY:
+    raise RuntimeError(
+        "GEMINI_API_KEY not found. Add it to the .env file."
+    )
 client = genai.Client(api_key=API_KEY)
-print('Hi!\nhow can i assist you today?')
+
+print('Hi!\nhow can i assist you today?  (type "quit" to exit)')
 CATEGORIES = [
     "BURNS", "DIABETES", "ORTHOPEDIC", "OPHTHALMOLOGY", "CARDIOLOGY",
     "TOXICOLOGY", "TRAUMA", "NEUROLOGY", "ALLERGY", "MATERNITY",
@@ -55,7 +70,7 @@ Patient message: "{}"
 # ---------- Model call (the ONLY model call in this architecture) 
 def classify(user_input: str) -> str:
     response = client.models.generate_content(
-        model='gemini-3.5-flash',
+        model='gemini-3.5-flash-lite',
         contents=ROUTING_PROMPT.format(user_input)
     )
     return response.text.strip()
@@ -86,7 +101,7 @@ def handle_message(user_input: str) -> str:
         return "Happy to help! good bye"
 
     elif category == "DOCTOR_INFO":
-            if  'ahmed' in user_input and "n't" not in user_input :
+            if  'ahmed' in user_input :
                   print(f'the doctor working time is {doctors["Dr Ahmed"]}')
 
                   return get_dr_stat('Dr Ahmed')
@@ -126,7 +141,14 @@ while True:
         user_inp = input().lower()
         if user_inp == "quit":
             break
+        
+        start = time.perf_counter()
         print(handle_message(user_inp)) 
-    except Exception as e:
+        
+
+        end = time.perf_counter()
+
+        print(f"Response Time: {end - start:.4f} seconds")
+    except Exception as e :
          print(f'error -> {e}')
-         print('send again later')
+         print(f'send again later')
