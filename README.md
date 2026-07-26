@@ -6,6 +6,7 @@ MedCare is a hospital that runs a walk-in/emergency chat intake system. Before a
 patient sees anyone, someone (or something) has to answer a simple but high-stakes
 question: **where does this patient need to go, right now?**
 
+
 Patients type in free-form messages describing symptoms, or ask about a specific
 doctor's availability and working hours. A human triage assistant would normally
 read the message, weigh the symptoms, and route the patient to the right

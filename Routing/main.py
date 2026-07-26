@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 with open("doctors.json", "r") as f:
     doctors = json.load(f)
-
+    
 def get_dr_stat(text) :
     av = rand.choice([True,False])
     if av : 
